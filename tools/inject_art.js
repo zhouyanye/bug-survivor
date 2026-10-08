@@ -42,10 +42,16 @@ const MAP = {
   enemy_inject:    ['e_inject'],
   enemy_zombie:    ['e_zombie'],
   enemy_cache:     ['e_cache'],
+  // v2.5：新增敌人
+  enemy_frag:      ['e_frag'],
+  enemy_stack:     ['e_stack'],
+  enemy_cors:      ['e_cors'],
   boss_debt:       ['e_techdebt'],
   boss_require:    ['e_require'],
   // v2.4：第三只 BOSS
   boss_prod:       ['e_prod'],
+  // v2.5：第四只 BOSS
+  boss_rmrf:       ['e_rmrf'],
   // v2.4：新增被动图标
   item_ai:         ['i_ai'],
   item_shield:     ['i_shield'],
@@ -60,6 +66,18 @@ const MAP = {
   magnet:          ['d_magnet'],
   bomb:            ['d_bomb'],
   clock:           ['d_clock'],
+  // v2.6：武器专属贴图（弹道 + 图标共用一张，覆盖程序化 ICONS）
+  shot_log:      ['shot_log', 'i_log'],
+  shot_aura:     ['shot_aura', 'i_aura'],
+  shot_orb:      ['shot_orb', 'i_orb'],
+  shot_regex:    ['shot_regex', 'i_regex'],
+  shot_undo:     ['shot_undo', 'i_undo'],
+  shot_hammer:   ['shot_hammer', 'i_hammer'],
+  shot_mine:     ['shot_mine', 'i_mine'],
+  shot_push:     ['shot_push', 'i_push'],
+  shot_overflow: ['shot_overflow', 'i_overflow'],
+  shot_review:   ['shot_review', 'i_review'],
+  shot_docker:   ['shot_docker', 'i_docker'],
 };
 
 const BEG = '/*__ART_BEG__*/';
