@@ -6,17 +6,23 @@
 <title>BUG 幸存者 · Bug Survivor</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-right:env(safe-area-inset-right,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-left:env(safe-area-inset-left,0px)
+}
 html,body{width:100%;height:100%;overflow:hidden;background:#04060c;
   font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,-apple-system,"Segoe UI",sans-serif;
   color:#e6edf7;user-select:none;-webkit-user-select:none}
 body::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:90;
   background:radial-gradient(ellipse at center,rgba(0,0,0,0) 42%,rgba(0,0,0,.6) 100%)}
 
-#fit{position:absolute;left:50%;top:50%;width:960px;height:540px;transform-origin:50% 50%;
+#fit{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform-origin:50% 50%;
   transform:translate(-50%,-50%) scale(1);overflow:hidden;background:#070b14;
-  box-shadow:0 0 100px rgba(56,189,248,.10),0 0 0 1px rgba(120,160,255,.10)}
+  box-shadow:0 0 100px rgba(56,189,248,.10),0 0 0 1px rgba(120,160,255,.10);touch-action:none}
 #game{position:absolute;left:0;top:0;display:block;image-rendering:pixelated}
-#ui{position:absolute;left:0;top:0;width:960px;height:540px;pointer-events:none}
+#ui{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none}
 .hidden{display:none !important}
 
 /* ============ HUD ============ */
@@ -86,6 +92,11 @@ body::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:90;
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 #minimap{width:120px;height:120px;display:block;border-radius:7px;background:#05080f}
 #mapwrap .cap{font-size:8.5px;letter-spacing:2px;color:#63779a;text-align:center;margin-top:4px}
+@media (pointer:coarse){
+  #skills{left:212px;bottom:18px;width:560px}
+  #buffs{left:212px;bottom:74px;width:560px}
+  #mapwrap{right:18px;bottom:18px;transform:scale(.88);transform-origin:right bottom}
+}
 
 /* BOSS 血条 */
 #bossbar{position:absolute;left:50%;top:86px;transform:translateX(-50%);width:440px;text-align:center}
@@ -241,7 +252,8 @@ body::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:90;
 #pauseInfo em{color:#7dd3fc;font-style:normal;font-weight:700}
 
 #stick{position:absolute;left:0;top:0;width:150px;height:150px;border-radius:50%;display:none;
-  pointer-events:none;border:2px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05)}
+  pointer-events:none;border:2px solid rgba(255,255,255,.22);background:rgba(7,13,26,.38);
+  box-shadow:0 10px 32px rgba(0,0,0,.35),inset 0 0 22px rgba(34,211,238,.08)}
 #stick .k{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;
   border-radius:50%;background:rgba(34,211,238,.55);border:2px solid rgba(255,255,255,.5)}
 </style>
@@ -420,7 +432,7 @@ body::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:90;
    ========================================================= */
 
 /* ---------------- 基础常量 ---------------- */
-const LW = 960, LH = 540;
+const LW = 1280, LH = 720;
 const WORLD = 2600;
 const RUN_TIME = 600;
 const COMBO_TIME = 2.6;      // 连击维持窗口（秒）
@@ -695,29 +707,40 @@ const Input = {
     addEventListener('blur', () => { this.keys = {}; if (Game.state === 'play') Game.togglePause(); });
 
     const fit = document.getElementById('fit');
+    const isUiTarget = e => e.target && e.target.closest &&
+      e.target.closest('.screen,.iconbtn,.btn,.dbtn,.hcard,.ubtn,.card');
     const toLocal = t => {
       const r = fit.getBoundingClientRect();
       return { x:(t.clientX - r.left) / r.width * LW, y:(t.clientY - r.top) / r.height * LH };
     };
+    const stickBase = () => ({ x:118, y:LH - 118 });
+    const moveStick = p => {
+      let dx = p.x - this.tox, dy = p.y - this.toy;
+      const d = Math.hypot(dx, dy) || 1, m = Math.min(d, 56);
+      this.tvx = dx / d * (m / 56); this.tvy = dy / d * (m / 56);
+      const k = document.querySelector('#stick .k');
+      if (k) k.style.transform = 'translate(' + (dx / d * m) + 'px,' + (dy / d * m) + 'px)';
+    };
     fit.addEventListener('touchstart', e => {
+      if (Game.state !== 'play' || UI.levelUpOpen || isUiTarget(e)) return;
       const t = e.changedTouches[0], p = toLocal(t);
       if (p.x < LW * 0.55) {
-        this.tid = t.identifier; this.tox = p.x; this.toy = p.y;
+        const base = stickBase();
+        this.tid = t.identifier; this.tox = base.x; this.toy = base.y;
         const st = document.getElementById('stick');
         st.style.display = 'block';
-        st.style.left = (p.x - 75) + 'px'; st.style.top = (p.y - 75) + 'px';
+        st.style.left = (base.x - 75) + 'px'; st.style.top = (base.y - 75) + 'px';
         st.querySelector('.k').style.transform = 'translate(0,0)';
+        moveStick(p);
       } else { this.dashTid = t.identifier; this.keys.Space = true; }
-    }, {passive:true});
+      e.preventDefault();
+    }, {passive:false});
     fit.addEventListener('touchmove', e => {
+      if (this.tid < 0) return;
       for (const t of e.changedTouches) {
         if (t.identifier !== this.tid) continue;
         const p = toLocal(t);
-        let dx = p.x - this.tox, dy = p.y - this.toy;
-        const d = Math.hypot(dx, dy) || 1, m = Math.min(d, 56);
-        this.tvx = dx / d * (m / 56); this.tvy = dy / d * (m / 56);
-        const k = document.querySelector('#stick .k');
-        if (k) k.style.transform = 'translate(' + (dx / d * m) + 'px,' + (dy / d * m) + 'px)';
+        moveStick(p);
       }
       e.preventDefault();
     }, {passive:false});
@@ -2088,18 +2111,39 @@ const cv = document.getElementById('game');
 const ctx = cv.getContext('2d');
 let CAM = { x:0, y:0 }, SCALE = 1, DPR = 1;
 
+function safeArea(){
+  if (typeof getComputedStyle !== 'function') return {top:0, right:0, bottom:0, left:0};
+  const css = getComputedStyle(document.documentElement);
+  const px = name => parseFloat(css.getPropertyValue(name)) || 0;
+  return {
+    top:px('--safe-top'),
+    right:px('--safe-right'),
+    bottom:px('--safe-bottom'),
+    left:px('--safe-left')
+  };
+}
+
 function resize(){
   DPR = Math.min(2, window.devicePixelRatio || 1);
-  SCALE = Math.min(innerWidth / LW, innerHeight / LH);
+  const safe = safeArea();
+  const vw = Math.max(1, innerWidth - safe.left - safe.right);
+  const vh = Math.max(1, innerHeight - safe.top - safe.bottom);
+  SCALE = Math.min(vw / LW, vh / LH);
   const fit = document.getElementById('fit');
+  const ui = document.getElementById('ui');
+  fit.style.width = LW + 'px'; fit.style.height = LH + 'px';
+  ui.style.width = LW + 'px'; ui.style.height = LH + 'px';
+  fit.style.left = (safe.left + vw / 2) + 'px';
+  fit.style.top = (safe.top + vh / 2) + 'px';
   fit.style.transform = 'translate(-50%,-50%) scale(' + SCALE + ')';
-  cv.width = Math.round(LW * SCALE * DPR); cv.height = Math.round(LH * SCALE * DPR);
-  cv.style.width = (LW * SCALE) + 'px'; cv.style.height = (LH * SCALE) + 'px';
-  ctx.setTransform(SCALE * DPR, 0, 0, SCALE * DPR, 0, 0);
+  cv.width = Math.round(LW * DPR); cv.height = Math.round(LH * DPR);
+  cv.style.width = LW + 'px'; cv.style.height = LH + 'px';
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   ctx.imageSmoothingEnabled = false;
 }
 addEventListener('resize', resize);
 addEventListener('orientationchange', () => setTimeout(resize, 200));
+if (window.visualViewport) visualViewport.addEventListener('resize', resize);
 
 function updateCamera(){
   const p = Game.player;

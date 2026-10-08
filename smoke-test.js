@@ -29,7 +29,7 @@ function makeEl(id) {
     getContext(){ return ctxStub; },
     querySelector(){ return makeEl('sub'); },
     querySelectorAll(){ return []; },
-    getBoundingClientRect(){ return { left:0, top:0, width:960, height:540 }; },
+    getBoundingClientRect(){ return { left:0, top:0, width:1280, height:720 }; },
   };
 }
 const els = {};
