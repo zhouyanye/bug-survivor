@@ -68,6 +68,13 @@ const GROUPS = [
     ['shot_docker.png',   'Docker 容器 · 集装箱'],
     ['turret.png',        'Docker 炮台（本体同步重绘）'],
   ]},
+  { title: 'v2.7 · 新角色 / 新武器', items: [
+    ['hero_dev.png',    '全栈工程师（默认）· 站姿重绘'],
+    ['hero_ai.png',     'AI 训练师 · 新角色（标准通关解锁）'],
+    ['hero_mf.png',     '摸鱼大师 · 新角色（累计击杀 3000 解锁）'],
+    ['shot_nullptr.png','空指针解引用 · 狙击针（无尽 8 分钟解锁）'],
+    ['shot_loop.png',   '死循环 while · 回环弹（累计击杀 8000 解锁）'],
+  ]},
   { title: '武器实体 / 特效', items: [
     ['mine.png',   '地雷（编译报错）'],
     ['turret.png', 'Docker 炮台'],

@@ -78,6 +78,11 @@ const MAP = {
   shot_overflow: ['shot_overflow', 'i_overflow'],
   shot_review:   ['shot_review', 'i_review'],
   shot_docker:   ['shot_docker', 'i_docker'],
+  shot_nullptr:  ['shot_nullptr', 'i_nullptr'],
+  shot_loop:     ['shot_loop', 'i_loop'],
+  hero_dev:      ['h_dev'],
+  hero_ai:       ['h_ai'],
+  hero_mf:       ['h_mf'],
 };
 
 const BEG = '/*__ART_BEG__*/';
