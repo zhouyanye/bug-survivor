@@ -1,0 +1,7 @@
+{
+ "name": "flame",
+ "w": 16,
+ "h": 32,
+ "frames": 4,
+ "src": "flameball-32x32.png"
+}

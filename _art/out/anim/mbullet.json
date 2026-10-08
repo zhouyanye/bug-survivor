@@ -1,0 +1,7 @@
+{
+ "name": "mbullet",
+ "w": 20,
+ "h": 20,
+ "frames": 5,
+ "src": "mage-bullet-13x13.png"
+}
