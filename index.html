@@ -653,7 +653,7 @@ const PMAP = {}; PASSIVES.forEach(p => PMAP[p.id] = p);
 /* ---------------- 敌人数据表 ---------------- */
 const ENEMIES = [
   { id:'null',  name:'空指针异常', sprite:'blob',   color:'#8b5cf6', hp:18,  sp:82,  dmg:5,  exp:2,  r:13, tMin:0   },
-  { id:'mem',   name:'内存泄漏',   sprite:'box',    color:'#2dd4bf', hp:58,  sp:60,  dmg:9,  exp:5,  r:17, tMin:55,  split:2 },
+  { id:'mem',   name:'内存泄漏',   sprite:'leak',    color:'#2dd4bf', hp:58,  sp:60,  dmg:9,  exp:5,  r:17, tMin:55,  split:2 },
   { id:'loop',  name:'死循环',     sprite:'arrow',  color:'#fb7185', hp:28,  sp:154, dmg:5,  exp:3,  r:14, tMin:75,  orbit:true },
   { id:'race',  name:'竞态条件',   sprite:'shard',  color:'#fbbf24', hp:36,  sp:110, dmg:7,  exp:3,  r:14, tMin:110, dash:true },
   { id:'block', name:'线程死锁',   sprite:'lock',   color:'#64748b', hp:105, sp:0,   dmg:12, exp:8,  r:21, tMin:150, slow:true },
@@ -990,6 +990,20 @@ const SHAPES = {
     if (y >= s * 0.52 && y <= s * 0.60) return 'a';
     if ((x + y) % 6 === 0 && y > 6 && y < s - 4) return 'd';
     if (x <= 4 && y <= 5) return 'l';
+    return 'm';
+  },
+  // 内存泄漏：有机泄漏体（眼睛由 withEyes 统一加）
+  leak: (x, y, s) => {
+    const cx = (s - 1) / 2, cy = (s - 1) / 2 - 1;
+    const dx = x - cx, dy = y - cy;
+    const wob = Math.sin(x * 1.2) * 1.2 + Math.cos(y * 0.9) * 1.0;
+    const r = 5.5 + wob, d = Math.hypot(dx, dy);
+    if (d > r) {
+      if ((x === 4 || x === 11) && y > cy && y < cy + 5 && (x + y) % 2 === 0) return 'd';
+      return null;
+    }
+    if (d > r - 1.2) return 'd';
+    if (dx < -1.5 && dy < -1) return 'l';
     return 'm';
   },
   // 死循环：倒三角台风式递推
