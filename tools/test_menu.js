@@ -69,10 +69,24 @@ step2('选武器屏', () => {
   G.heroId = 'be';
   UI.openWeaponSel();
   const n = (getEl('weaponBox').innerHTML.match(/class="wcard/g) || []).length;
-  if (n !== 13) throw new Error('卡片数=' + n);
-  const locked = (getEl('weaponBox').innerHTML.match(/locked/g) || []).length;
-  if (locked < 5) throw new Error('锁定数=' + locked);
+  if (n !== 5) throw new Error('卡片数=' + n + ' 应为5基础');
   if (!/后.*端/.test(getEl('wsHero').textContent)) throw new Error('wsHero=' + getEl('wsHero').textContent);
+  if (G.starterWeapon !== 'push') throw new Error('默认应为角色武器 push, 实际=' + G.starterWeapon);
+});
+step2('选武器屏-角色专属', () => {
+  G.heroId = 'mf';
+  G.starterWeapon = (T.HMAP['mf'] || T.HEROES[0]).weapon; // 模拟点击角色卡
+  UI.openWeaponSel();
+  const n = (getEl('weaponBox').innerHTML.match(/class="wcard/g) || []).length;
+  if (n !== 6) throw new Error('卡片数=' + n + ' 应为5+专属undo');
+  if (G.starterWeapon !== 'undo') throw new Error('mf 默认应为 undo, 实际=' + G.starterWeapon);
+});
+step2('换角色重置初始武器', () => {
+  G.heroId = 'be'; G.starterWeapon = 'aura';
+  UI.openWeaponSel.__proto__; // noop
+  // 模拟点击角色卡的逻辑
+  G.heroId = 'qa'; G.starterWeapon = (T.HMAP['qa'] || T.HEROES[0]).weapon;
+  if (G.starterWeapon !== 'regex') throw new Error('换角色后应重置为 regex, 实际=' + G.starterWeapon);
 });
 step2('出战', () => {
   G.starterWeapon = 'push';

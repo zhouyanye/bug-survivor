@@ -21,7 +21,7 @@ const MAP = {
   bg_tile:         ['bgTile'],        // 背景砖：单独在 drawBackground 里用
   shot_energy:     ['shotEnergy'],    // 灰度贴图：运行时按武器色染色
   shot_orb:        ['shotOrb'],
-  mine:            ['mine'],          // 覆盖 buildExtraSprites 里的程序化版本
+  mine:            ['mine', 'd_mineitem'],  // 覆盖程序化版本；拾取道具图标复用
   turret:          ['turret'],
   boom:            ['boom'],          // 爆炸特效贴图
   hero:            ['p_down', 'p_up', 'p_side'],
@@ -54,7 +54,7 @@ const MAP = {
   boss_rmrf:       ['e_rmrf'],
   // v2.4：新增被动图标
   item_ai:         ['i_ai'],
-  item_shield:     ['i_shield'],
+  item_shield:     ['i_shield', 'd_shield'],  // WAF 护盾限时道具拾取图标复用
   item_backup:     ['i_backup'],
   // 宝箱三态
   chest_closed:    ['chest'],
@@ -73,7 +73,6 @@ const MAP = {
   shot_regex:    ['shot_regex', 'i_regex'],
   shot_undo:     ['shot_undo', 'i_undo'],
   shot_hammer:   ['shot_hammer', 'i_hammer'],
-  shot_mine:     ['shot_mine', 'i_mine'],
   shot_push:     ['shot_push', 'i_push'],
   shot_overflow: ['shot_overflow', 'i_overflow'],
   shot_review:   ['shot_review', 'i_review'],
