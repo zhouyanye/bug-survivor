@@ -33,22 +33,22 @@ body::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:90;
   padding:9px 14px;display:flex;align-items:center;gap:14px;
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
   box-shadow:0 6px 22px -8px rgba(0,0,0,.8)}
-.paneL{display:flex;flex-direction:column;gap:5px;flex:none;width:238px}
-.barbox{position:relative;height:22px;border-radius:11px;overflow:hidden;
+.paneL{display:flex;flex-direction:column;gap:6px;flex:none;width:270px}
+.barbox{position:relative;height:28px;border-radius:14px;overflow:hidden;
   background:rgba(2,6,16,.72);border:1px solid rgba(94,234,212,.25);
   box-shadow:inset 0 2px 6px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.4)}
 .barbox .ghost{position:absolute;left:0;top:0;bottom:0;border-radius:10px;background:rgba(255,240,240,.8);transition:width .35s ease;}.barbox.low{animation:hpPulse .8s ease-in-out infinite}@keyframes hpPulse{0%,100%{border-color:rgba(220,38,38,.65)}50%{border-color:#ef4444;box-shadow:inset 0 2px 6px rgba(0,0,0,.6),0 0 14px 1px rgba(220,38,38,.85)}}.barbox .fill{position:absolute;left:0;top:0;bottom:0;border-radius:10px;transition:width .16s ease;
   box-shadow:inset 0 2px 0 rgba(255,255,255,.35),inset 0 -2px 4px rgba(0,0,0,.25)}
 .barbox .txt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-size:11.5px;font-weight:800;letter-spacing:.4px;text-shadow:0 1px 3px rgba(0,0,0,.9)}
-.mini{position:relative;height:16px;border-radius:8px;overflow:hidden;
+  font-size:14px;font-weight:900;letter-spacing:.4px;text-shadow:0 1px 3px rgba(0,0,0,.9)}
+.mini{position:relative;height:20px;border-radius:10px;overflow:hidden;
   background:rgba(2,6,16,.72);border:1px solid rgba(167,139,250,.30);
   box-shadow:inset 0 2px 5px rgba(0,0,0,.6)}
 .mini .fill{overflow:hidden;}.mini .fill::after{content:'';position:absolute;top:0;bottom:0;left:0;right:0;background:linear-gradient(100deg,transparent 20%,rgba(255,255,255,.38) 50%,transparent 80%);animation:expShine 2.4s linear infinite;pointer-events:none}@keyframes expShine{from{transform:translateX(-100%)}to{transform:translateX(100%)}}.mini .fill{position:absolute;left:0;top:0;bottom:0;
   background:linear-gradient(90deg,#a78bfa,#22d3ee);box-shadow:0 0 10px rgba(167,139,250,.55),inset 0 2px 0 rgba(255,255,255,.30);
   transition:width .12s linear}
 .mini .txt{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;
-  padding:0 7px;font-size:9.5px;font-weight:700;color:#dbe6f7;letter-spacing:.3px}
+  padding:0 8px;font-size:11px;font-weight:700;color:#dbe6f7;letter-spacing:.3px}
 .paneC{flex:1;min-width:0;display:flex;justify-content:center}
 .clock{font-size:30px;font-weight:900;letter-spacing:1px;font-variant-numeric:tabular-nums;
   line-height:1;text-shadow:0 2px 12px rgba(34,211,238,.35);text-align:center}
@@ -645,7 +645,7 @@ const PASSIVES = [
   // ---------- v2.4 新增 ----------
   { id:'ai',     name:'Copilot 助手', abbr:'智', color:'#38bdf8', max:5, desc:'伤害 +12%' },
 
-  { id:'backup', name:'代 码 备 份',  abbr:'备', color:'#facc15', max:3, desc:'倒下时原地回滚复活，回复 60% 生命' },
+
 ];
 const PMAP = {}; PASSIVES.forEach(p => PMAP[p.id] = p);
 
@@ -673,10 +673,14 @@ const ENEMIES = [
 const EMAP = {}; ENEMIES.forEach(e => EMAP[e.id] = e);
 
 const BOSS_DEFS = [
-  { id:'rmrf',     name:'删库魔君',   color:'#f97316', hp:1500, sp:48, dmg:26, exp:180, r:56, at:200, sprite:'demon' },
-  { id:'techdebt', name:'技术债恶魔', color:'#f43f5e', hp:2200, sp:44, dmg:28, exp:120, r:52, at:300, sprite:'demon' },
-  { id:'require',  name:'需求变更兽', color:'#a855f7', hp:5200, sp:52, dmg:34, exp:260, r:58, at:450, sprite:'beast' },
-  { id:'prod',     name:'线上 P0 事故', color:'#ef4444', hp:10500, sp:60, dmg:44, exp:600, r:64, at:558, sprite:'demon' },
+  { id:'rmrf',     name:'删库魔君',   color:'#f97316', hp:2400,  sp:48, dmg:26, exp:180, r:56, at:200, sprite:'demon',
+    summon:[{hp:0.7, mobs:[['null',4]]}, {hp:0.35, mobs:[['null',6]]}] },
+  { id:'techdebt', name:'技术债恶魔', color:'#f43f5e', hp:3500,  sp:44, dmg:28, exp:120, r:52, at:300, sprite:'demon',
+    summon:[{hp:0.7, mobs:[['frag',3]]}, {hp:0.35, mobs:[['frag',4],['stack',2]]}] },
+  { id:'require',  name:'需求变更兽', color:'#a855f7', hp:8000,  sp:52, dmg:34, exp:260, r:58, at:450, sprite:'beast',
+    summon:[{hp:0.7, mobs:[['elite',2]]}, {hp:0.35, mobs:[['elite',2]]}] },
+  { id:'prod',     name:'线上 P0 事故', color:'#ef4444', hp:16000, sp:60, dmg:44, exp:600, r:64, at:558, sprite:'demon',
+    summon:[{hp:0.7, mobs:[['random',6]]}, {hp:0.35, mobs:[['random',8]]}] },
 ];
 
 /* ---------------- 全场事件 ---------------- */
@@ -1447,7 +1451,7 @@ const Game = {
   heroId:'dev',
 
   reset(){
-    this.t = 0; this.shake = 0;
+    this.t = 0; this.shake = 0; this.bossJitter = BOSS_DEFS.map(() => rnd(-25, 25));
     this.enemies.length = 0; this.bullets.length = 0; this.gems.length = 0;
     this.drops.length = 0; this.parts.length = 0; this.texts.length = 0;
     this.booms.length = 0;
@@ -1533,6 +1537,7 @@ function spawnBoss(){
     y:clamp(Game.player.y + Math.sin(ang) * d, -WORLD, WORLD),
     vx:0, vy:0, r:b.r, hp, maxHp:hp, dmg:b.dmg * Game.diff.dmg, exp:b.exp, sp:b.sp,
     elite:false, boss:true, kb:0, kbx:0, kby:0, hitFlash:0, dead:false,
+    summonCfg:b.summon || [], summoned:{},
     dashT:0, dashCd:3, orbitDir:1, wob:0, hitCd:0, slowT:0, shootT:2.2, face:0,
   };
   Game.enemies.push(e);
@@ -1629,7 +1634,7 @@ function killEnemy(e){
   } else {
     spawnGem(e.x, e.y, e.exp);
     const lucky = 1 + Save.lv('lucky') * 0.4;
-    if (Math.random() < 0.020 * lucky * Game.diff.drop) spawnDrop(e.x, e.y, pick(['heal','magnet','bomb','clock']));
+    if (Math.random() < 0.020 * lucky * Game.diff.drop) spawnDrop(e.x, e.y, pick(['magnet','bomb','clock']));
   }
   const d = EMAP[e.id];
   if (d && d.split && !e.elite && !e.boss && !e.noSplit && Game.enemies.length < MAX_ENEMIES) {
@@ -1660,19 +1665,7 @@ function hurtPlayer(dmg){
   SFX.hurt();
 
   if (p.hp <= 0) {
-    // 代码备份：倒下时原地回滚复活一次
-    const bp = p.passives.find(x => x.id === 'backup');
-    if (bp && bp.lv > 0) {
-      bp.lv--;
-      if (bp.lv <= 0) p.passives = p.passives.filter(x => x.id !== 'backup');
-      p.hp = p.maxHp * 0.6; p.inv = 2.4;
-      particle(p.x, p.y, '#facc15', 34, 280, 6);
-      boom(p.x, p.y, 130, '#facc15', 'seq');
-      UI.toast('代 码 回 滚 ！');
-      UI.renderSlots();
-      SFX.tone(520, 0.26, 'square', 0.16, 700);
-      return;
-    }
+
     p.hp = 0; p.dead = true; endGame(false);
   }
 }
@@ -1823,6 +1816,33 @@ function updateEnemies(dt){
     const base = EMAP[e.id] || {};
     let sp = e.sp * slowAll;
     if (e.boss) {
+      // 血量阈值召唤小怪
+      if (e.summonCfg && e.summonCfg.length) {
+        const hr = e.hp / e.maxHp;
+        e.summonCfg.forEach((s, si) => {
+          if (!e.summoned[si] && hr <= s.hp) {
+            e.summoned[si] = true;
+            for (const [mid, cnt] of s.mobs) {
+              for (let k = 0; k < cnt; k++) {
+                const a = rnd(0, TAU), d = rnd(60, 140);
+                const x = clamp(e.x + Math.cos(a) * d, -WORLD, WORLD);
+                const y = clamp(e.y + Math.sin(a) * d, -WORLD, WORLD);
+                if (mid === 'elite') {
+                  const pool = ['null','mem','loop','race','seg','dep','worm','inject','zombie','cache','frag','stack','cors'];
+                  spawnEnemy(pick(pool), x, y, 1, true);
+                } else if (mid === 'random') {
+                  const pool = ['null','mem','loop','race','seg','dep','worm','inject','zombie','cache','frag','stack','cors'];
+                  spawnEnemy(pick(pool), x, y, 1, false);
+                } else {
+                  spawnEnemy(mid, x, y, 1, false);
+                }
+              }
+            }
+            UI.toast('⚠ ' + e.name + ' 召唤了增援！');
+            SFX.boss();
+          }
+        });
+      }
       e.shootT -= dt;
       if (e.shootT <= 0) {
         e.shootT = 2.0;
@@ -1879,6 +1899,7 @@ function updateEnemies(dt){
       }
     }
 
+    if (base.slow && d < 90) { p.slowT = Math.max(p.slowT, 0.25); }
     if (d < e.r + p.r) {
       hurtPlayer(e.dmg);
       if (base.slow) { p.slowT = 0.9; UI.toast('被死锁缠住了'); }
@@ -1942,7 +1963,7 @@ function updateSpawns(dt){
 
   // BOSS
   const nb = BOSS_DEFS[Game.bossSpawned];
-  if (nb && t >= nb.at) spawnBoss();
+  if (nb && t >= nb.at + (Game.bossJitter[Game.bossSpawned] || 0)) spawnBoss();
   // 无尽模式：固定 Boss 打完后，每 150 秒循环刷一只（血量随次数成长）
   if (Game.endless && Game.bossSpawned >= BOSS_DEFS.length) {
     Game.endlessBossAcc = (Game.endlessBossAcc || 0) + dt;
@@ -2497,7 +2518,7 @@ function drawEnemies(){
     if (!visible(x, y, 110)) continue;
     const spr = SPR['e_' + e.id];
     if (!spr) continue;
-    const w = e.r * 3.1, h = e.r * 3.1;
+    const w = e.r * (e.boss ? 4.3 : 3.1), h = e.r * (e.boss ? 4.3 : 3.1);
     const breathe = 1 + Math.sin(Game.t * 3.6 + e.x * 0.08) * 0.035;
     // 影子
     ctx.fillStyle = 'rgba(0,0,0,.40)';
@@ -2507,6 +2528,13 @@ function drawEnemies(){
       ctx.save(); ctx.shadowColor = e.color; ctx.shadowBlur = e.boss ? 30 : 16;
     }
     blit(spr, x, y - 2, w * breathe, h * breathe, e.face < -Math.PI / 2 || e.face > Math.PI / 2);
+    if (e.id === 'block') {  // 线程死锁：可见的减速力场
+      const pulse = 1 + Math.sin(Game.t * 3) * 0.06;
+      ctx.save(); ctx.globalAlpha = 0.30 + Math.sin(Game.t * 3) * 0.10;
+      ctx.strokeStyle = '#64748b'; ctx.lineWidth = 2; ctx.setLineDash([8, 6]);
+      ctx.beginPath(); ctx.arc(x, y, 90 * pulse, 0, TAU); ctx.stroke();
+      ctx.setLineDash([]); ctx.restore(); ctx.globalAlpha = 1;
+    }
     if (e.elite || e.boss) ctx.restore();
 
     if (e.hitFlash > 0) blit(SPR['w_e_' + e.id], x, y - 2, w * breathe, h * breathe,
